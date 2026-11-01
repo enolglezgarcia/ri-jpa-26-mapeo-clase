@@ -289,9 +289,6 @@ public class WorkOrder extends BaseEntity {
             }
         }
         StateChecks.isTrue(isAssigned(), "Work order not assigned");
-        StateChecks.isTrue(
-            !interventions.stream().anyMatch(i -> i.getMechanic().equals(mechanic) && i.getDate().equals(date)),
-            "Duplicated intervention for the same mechanic and date");
         addIntervention(mechanic, date, minutes, substitutions);
     }
 
