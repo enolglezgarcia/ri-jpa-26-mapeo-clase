@@ -8,10 +8,12 @@ import java.util.Map;
 import java.util.Set;
 
 import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
 import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.cws.domain.types.Percentage;
@@ -27,7 +29,7 @@ public class Invoice extends BaseEntity {
     }
 
     // Natural attributes
-    @AttributeOverride(name = "number", column = @Column(unique = true))
+    @Column(unique = true)
     private long number;
     private LocalDate date;
     @Enumerated(EnumType.STRING)
@@ -37,6 +39,7 @@ public class Invoice extends BaseEntity {
      * Subtotal amount of the invoice, before applying VAT. This represents the
      * taxable base.
      */
+    @AttributeOverride(name = "amount", column = @Column(name = "subtotal", precision = 19, scale = 2))
     private Money subtotal = Money.ZERO; // cents
 
     /*
@@ -48,16 +51,20 @@ public class Invoice extends BaseEntity {
      * VAT amount calculated from the subtotal amount. This is the tax the customer
      * must pay.
      */
+    @AttributeOverride(name = "amount", column = @Column(name = "vatAmount", precision = 19, scale = 2))
     private Money vatAmount = Money.ZERO; // cents
 
     /*
      * Total amount of the invoice including VAT. This is the final amount the
      * customer must pay.
      */
+    @AttributeOverride(name = "amount", column = @Column(name = "total", precision = 19, scale = 2))
     private Money total = Money.ZERO; // cents
 
     // Accidental attributes
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<WorkOrder> workOrders = new HashSet<>();
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Charge> charges = new HashSet<>();
 
     // ----------------------------- Getters -------------------------------------

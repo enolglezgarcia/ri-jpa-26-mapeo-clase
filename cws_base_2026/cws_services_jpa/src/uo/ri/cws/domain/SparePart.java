@@ -11,10 +11,10 @@ import uo.ri.util.assertion.ArgumentChecks;
 public class SparePart extends BaseEntity {
 
     // Natural attributes
-    @AttributeOverride(name = "code", column = @Column(unique = true))
+    @Column(unique = true)
     private String code;
     private String description;
-    @AttributeOverride(name = "amount", column = @Column(precision = 19, scale = 2))
+    @AttributeOverride(name = "amount", column = @Column(name = "unitPrice", precision = 19, scale = 2))
     private Money unitPrice;
 
     SparePart() {

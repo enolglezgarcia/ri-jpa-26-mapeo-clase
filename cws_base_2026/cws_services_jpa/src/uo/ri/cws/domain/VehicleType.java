@@ -11,9 +11,9 @@ import uo.ri.util.assertion.ArgumentChecks;
 
 @Entity
 public class VehicleType extends BaseEntity {
-    @AttributeOverride(name = "name", column = @Column(unique = true))
+    @Column(unique = true)
     private String name;
-    @AttributeOverride(name = "amount", column = @Column(precision = 19, scale = 2))
+    @AttributeOverride(name = "amount", column = @Column(name = "pricePerHour", precision = 19, scale = 2))
     private Money pricePerHour;
 
     VehicleType() {

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -43,7 +44,7 @@ public class WorkOrder extends BaseEntity {
     private Mechanic mechanic;
     @ManyToOne
     private Vehicle vehicle;
-    @OneToMany(mappedBy = "workOrder")
+    @OneToMany(mappedBy = "workOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Intervention> interventions = new HashSet<>();
 
     // ---- Constructors ----
@@ -337,10 +338,12 @@ public class WorkOrder extends BaseEntity {
             }
         }
         StateChecks.isTrue(isAssigned() || isFinished(), "Work order neither assigned nor finished");
+
         StateChecks.isTrue(
-            !interventions.stream().anyMatch(i -> i.getMechanic().equals(mechanic) && i.getDate().equals(date)),
+            interventions.stream().noneMatch(
+                i -> i.getMechanic().equals(mechanic) && i.getDate().equals(date.truncatedTo(ChronoUnit.MILLIS))),
             "Duplicated intervention for the same mechanic and date");
-        date.truncatedTo(ChronoUnit.MILLIS);
+        this.date = date.truncatedTo(ChronoUnit.MILLIS);
         new Intervention(mechanic, this, date, minutes, substitutions);
 
     }

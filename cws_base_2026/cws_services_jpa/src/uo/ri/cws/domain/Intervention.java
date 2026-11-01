@@ -20,7 +20,7 @@ import uo.ri.util.assertion.ArgumentChecks;
  * aggregate class of WorkOrder. Only WorkOrder can create Interventions.
  */
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "mechanic_id", "workorder_id", "date" }))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "MECHANIC_ID", "WORKORDER_ID", "DATE" }))
 public class Intervention extends BaseEntity {
     // Natural attributes
     private LocalDateTime date;

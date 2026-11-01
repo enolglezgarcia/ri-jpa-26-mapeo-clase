@@ -182,10 +182,6 @@ public class Associations {
             StateChecks.isTrue(intervention.getMechanic() == null, "Intervention already has a mechanic");
             StateChecks.isFalse(workOrder._getInterventions().contains(intervention),
                 "Work order already has this intervention");
-            for (Intervention i : workOrder._getInterventions()) {
-                StateChecks.isTrue(!(i.getMechanic().equals(mechanic) && i.getDate().equals(intervention.getDate())),
-                    "Duplicated intervention for the same mechanic and date");
-            }
             intervention._setWorkOrder(workOrder);
             intervention._setMechanic(mechanic);
             workOrder._getInterventions().add(intervention);

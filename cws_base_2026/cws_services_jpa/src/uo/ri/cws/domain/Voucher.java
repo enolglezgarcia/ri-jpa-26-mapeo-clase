@@ -16,7 +16,7 @@ public class Voucher extends PaymentMean {
     @AttributeOverride(name = "code", column = @Column(unique = true))
     private VoucherCode code;
     private String description;
-    @AttributeOverride(name = "amount", column = @Column(precision = 19, scale = 2))
+    @AttributeOverride(name = "amount", column = @Column(name = "availableAmount", precision = 19, scale = 2))
     private Money availableAmount; // cents
 
     // ---- Constructors ----
