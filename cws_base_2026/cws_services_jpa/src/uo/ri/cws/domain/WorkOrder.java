@@ -21,7 +21,7 @@ import uo.ri.util.assertion.ArgumentChecks;
 import uo.ri.util.assertion.StateChecks;
 
 @Entity
-@Table(name = "TWORKORDERS", uniqueConstraints = @UniqueConstraint(columnNames = { "VEHICLE_ID", "DATE" }))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "VEHICLE_ID", "DATE" }))
 public class WorkOrder extends BaseEntity {
 
     public enum WorkOrderState {

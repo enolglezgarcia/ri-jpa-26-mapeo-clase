@@ -1,19 +1,34 @@
 package uo.ri.cws.domain;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 import uo.ri.util.assertion.StateChecks;
 
-public class Charge {
+@Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "invoice_id", "paymentmean_id" }))
+public class Charge extends BaseEntity {
 
     // Natural attributes
+    @AttributeOverride(name = "amount", column = @Column(precision = 19, scale = 2))
     private Money amount; // cents
 
     // Accidental attributes
+    @ManyToOne
     private Invoice invoice;
+    @ManyToOne
     private PaymentMean paymentMean;
 
     // ------ Constructors -----
+
+    Charge() {
+    }
 
     /* package */ Charge(Invoice invoice, PaymentMean paymentMean, Money amount) {
         // validates the arguments

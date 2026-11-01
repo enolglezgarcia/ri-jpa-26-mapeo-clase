@@ -7,7 +7,7 @@ import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
+import jakarta.persistence.OneToMany;
 import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
@@ -23,7 +23,7 @@ public abstract class PaymentMean extends BaseEntity {
     // Accidental attributes
     @ManyToOne
     private Client client;
-    @Transient
+    @OneToMany(mappedBy = "paymentMean")
     private Set<Charge> charges = new HashSet<>();
 
     // ---- Association helpers ----
