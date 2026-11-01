@@ -1,26 +1,40 @@
 package uo.ri.cws.domain;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.LicensePlate;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 
-public class Vehicle {
+@Entity
+public class Vehicle extends BaseEntity {
 
     // Natural attributes
+    @AttributeOverride(name = "licensePlate", column = @Column(unique = true))
     private LicensePlate licensePlate;
     private String make;
     private String model;
 
     // Accidental attributes
+    @ManyToOne
     private Client client;
+    @ManyToOne
     private VehicleType vehicleType;
+    @OneToMany(mappedBy = "vehicle")
     private Set<WorkOrder> workOrders = new HashSet<>();
 
     // ---- Constructors ----
+
+    Vehicle() {
+
+    }
 
     public Vehicle(LicensePlate plateNumber) {
         // Delegate to the other constructor with meaningful default values for make and
@@ -79,26 +93,6 @@ public class Vehicle {
     /* package */
     void _setClient(Client client) {
         this.client = client;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(licensePlate);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Vehicle other = (Vehicle) obj;
-        return Objects.equals(licensePlate, other.licensePlate);
     }
 
     @Override

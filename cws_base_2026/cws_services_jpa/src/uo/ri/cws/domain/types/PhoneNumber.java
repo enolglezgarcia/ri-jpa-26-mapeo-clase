@@ -2,8 +2,10 @@ package uo.ri.cws.domain.types;
 
 import java.util.regex.Pattern;
 
+import jakarta.persistence.Embeddable;
 import uo.ri.util.assertion.ArgumentChecks;
 
+@Embeddable
 public record PhoneNumber(String phone) {
 
     // E.164: + followed by 7 to 15 digits (country code + subscriber number)

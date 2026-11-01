@@ -4,14 +4,26 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.UniqueConstraint;
+import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 import uo.ri.util.assertion.StateChecks;
 
-public class WorkOrder {
+@Entity
+@Table(name = "TWORKORDERS", uniqueConstraints = @UniqueConstraint(columnNames = { "VEHICLE_ID", "DATE" }))
+public class WorkOrder extends BaseEntity {
 
     public enum WorkOrderState {
         OPEN, ASSIGNED, FINISHED, APPROVED, INVOICED
@@ -20,16 +32,25 @@ public class WorkOrder {
     // Natural attributes
     private LocalDateTime date;
     private String description;
+    @AttributeOverride(name = "amount", column = @Column(precision = 19, scale = 2))
     private Money amount = Money.ZERO; // cents
+    @Enumerated(EnumType.STRING)
     private WorkOrderState state = WorkOrderState.OPEN;
 
     // Accidental attributes
+    @Transient
     private Invoice invoice;
+    @ManyToOne
     private Mechanic mechanic;
+    @ManyToOne
     private Vehicle vehicle;
+    @OneToMany(mappedBy = "workOrder")
     private Set<Intervention> interventions = new HashSet<>();
 
     // ---- Constructors ----
+
+    WorkOrder() {
+    }
 
     public WorkOrder(Vehicle vehicle) {
         this(vehicle, LocalDateTime.now(), "no-description");
@@ -352,27 +373,6 @@ public class WorkOrder {
     }
 
     // ---- Object methods ----
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(date, vehicle);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        WorkOrder other = (WorkOrder) obj;
-        return Objects.equals(date, other.date) && Objects.equals(vehicle, other.vehicle);
-    }
-
     @Override
     public String toString() {
         return "WorkOrder [date=" + date + ", description=" + description + ", amount=" + amount + ", state=" + state

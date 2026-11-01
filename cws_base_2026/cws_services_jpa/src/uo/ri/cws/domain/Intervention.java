@@ -3,9 +3,15 @@ package uo.ri.cws.domain;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 
@@ -13,17 +19,25 @@ import uo.ri.util.assertion.ArgumentChecks;
  * Represents an intervention performed by a mechanic on a work order. Internal
  * aggregate class of WorkOrder. Only WorkOrder can create Interventions.
  */
-public class Intervention {
+@Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "mechanic_id", "workorder_id", "date" }))
+public class Intervention extends BaseEntity {
     // Natural attributes
     private LocalDateTime date;
     private int minutes;
 
     // Accidental attributes
+    @ManyToOne
     private WorkOrder workOrder;
+    @ManyToOne
     private Mechanic mechanic;
+    @OneToMany(mappedBy = "intervention", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Substitution> substitutions = new HashSet<>();
 
     // ---------------------------- Constructors -----------------------------
+    Intervention() {
+    }
+
     /**
      * All these constructors are package-private Only WorkOrder (aggregate root)
      * can create Interventions
@@ -159,27 +173,6 @@ public class Intervention {
             ArgumentChecks.isNotNull(sparePart, "Spare part cannot be null");
             ArgumentChecks.isTrue(quantity > 0, "Quantity must be positive");
         }
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(date, mechanic, workOrder);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Intervention other = (Intervention) obj;
-        return Objects.equals(date, other.date) && Objects.equals(mechanic, other.mechanic)
-            && Objects.equals(workOrder, other.workOrder);
     }
 
     @Override

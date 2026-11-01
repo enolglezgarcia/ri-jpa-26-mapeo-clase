@@ -1,21 +1,31 @@
 package uo.ri.cws.domain;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.FullName;
 import uo.ri.cws.domain.types.Nif;
 import uo.ri.util.assertion.ArgumentChecks;
 
-public class Mechanic {
+@Entity
+public class Mechanic extends BaseEntity {
 
     // Natural attributes
+    @AttributeOverride(name = "nif", column = @Column(unique = true))
     private Nif nif;
     private FullName fullName;
 
     // Accidental attributes
+    @OneToMany(mappedBy = "mechanic")
     private Set<WorkOrder> assigned = new HashSet<>();
+
+    Mechanic() {
+    }
 
     public Mechanic(Nif nif) {
         // Delegate to the other constructor with meaningful default values for the
@@ -60,26 +70,6 @@ public class Mechanic {
 
     public Set<WorkOrder> getAssigned() {
         return new HashSet<>(assigned);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nif);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Mechanic other = (Mechanic) obj;
-        return Objects.equals(nif, other.nif);
     }
 
     @Override
