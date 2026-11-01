@@ -14,7 +14,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
@@ -38,7 +37,7 @@ public class WorkOrder extends BaseEntity {
     private WorkOrderState state = WorkOrderState.OPEN;
 
     // Accidental attributes
-    @Transient
+    @ManyToOne
     private Invoice invoice;
     @ManyToOne
     private Mechanic mechanic;

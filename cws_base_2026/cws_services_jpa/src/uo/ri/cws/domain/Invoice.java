@@ -5,15 +5,21 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.cws.domain.types.Percentage;
 import uo.ri.util.assertion.ArgumentChecks;
 import uo.ri.util.assertion.StateChecks;
 
-public class Invoice {
+@Entity
+public class Invoice extends BaseEntity {
     private static final LocalDate JULY_1_2012 = LocalDate.of(2012, 7, 1);
 
     public enum InvoiceState {
@@ -21,8 +27,10 @@ public class Invoice {
     }
 
     // Natural attributes
+    @AttributeOverride(name = "number", column = @Column(unique = true))
     private long number;
     private LocalDate date;
+    @Enumerated(EnumType.STRING)
     private InvoiceState state = InvoiceState.ISSUED;
 
     /*
@@ -55,6 +63,10 @@ public class Invoice {
     // ----------------------------- Getters -------------------------------------
 
     // ----------------- Constructors -------------------------------------
+
+    Invoice() {
+
+    }
 
     public Invoice(long number) {
         this(number, LocalDate.now(), List.of());
@@ -258,26 +270,6 @@ public class Invoice {
         Money.MoneyCalculator calculator = Money.calc();
         requestedCharges.values().forEach(calculator::add);
         return calculator.toMoneyRoundedToCents();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(Long.valueOf(number));
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Invoice other = (Invoice) obj;
-        return number == other.number;
     }
 
     @Override
