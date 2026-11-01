@@ -4,17 +4,25 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Objects;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import uo.ri.cws.domain.types.CreditCardNumber;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 
+@Entity
 public class CreditCard extends PaymentMean {
 
+    @AttributeOverride(name = "number", column = @Column(unique = true))
     private CreditCardNumber number;
     private String type;
     private LocalDate validThru;
 
     // ---- Constructors ----
+    CreditCard() {
+    }
+
     public CreditCard(CreditCardNumber number, String type, YearMonth validThru) {
         ArgumentChecks.isNotNull(number, "card number cannot be null");
         ArgumentChecks.isNotBlank(type, "card type cannot be null or blank");

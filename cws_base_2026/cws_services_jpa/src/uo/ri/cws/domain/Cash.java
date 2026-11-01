@@ -1,11 +1,15 @@
 package uo.ri.cws.domain;
 
+import jakarta.persistence.Entity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 
+@Entity
 public class Cash extends PaymentMean {
 
     // ---- Constructors ----
+    Cash() {
+    }
 
     public Cash(Client client) {
         ArgumentChecks.isNotNull(client, "Client cannot be null");
