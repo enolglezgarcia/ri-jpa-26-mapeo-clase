@@ -33,7 +33,7 @@ public class Cash extends PaymentMean {
 
     @Override
     public int hashCode() {
-        return getClient().hashCode();
+        return super.hashCode();
     }
 
     @Override
@@ -44,11 +44,13 @@ public class Cash extends PaymentMean {
         if (obj == null) {
             return false;
         }
+        if (!super.equals(obj)) {
+            return false;
+        }
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Cash other = (Cash) obj;
-        return getClient().equals(other.getClient());
+        return true;
     }
 
 }
