@@ -3,18 +3,20 @@ package uo.ri.cws.domain;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.util.assertion.ArgumentChecks;
 
 @Entity
+@Table(name = "TSPAREPARTS")
 public class SparePart extends BaseEntity {
 
     // Natural attributes
     @Column(unique = true)
     private String code;
     private String description;
-    @AttributeOverride(name = "amount", column = @Column(name = "unitPrice", precision = 19, scale = 2))
+    @AttributeOverride(name = "amount", column = @Column(name = "price", precision = 19, scale = 2))
     private Money unitPrice;
 
     SparePart() {

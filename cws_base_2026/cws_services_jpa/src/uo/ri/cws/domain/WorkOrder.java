@@ -22,7 +22,7 @@ import uo.ri.util.assertion.ArgumentChecks;
 import uo.ri.util.assertion.StateChecks;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "VEHICLE_ID", "DATE" }))
+@Table(name = "TWORKORDERS", uniqueConstraints = @UniqueConstraint(columnNames = { "VEHICLE_ID", "DATE" }))
 public class WorkOrder extends BaseEntity {
 
     public enum WorkOrderState {
@@ -32,7 +32,7 @@ public class WorkOrder extends BaseEntity {
     // Natural attributes
     private LocalDateTime date;
     private String description;
-    @AttributeOverride(name = "amount", column = @Column(precision = 19, scale = 2))
+    @AttributeOverride(name = "amount", column = @Column(name = "total_amount", precision = 19, scale = 2))
     private Money amount = Money.ZERO; // cents
     @Enumerated(EnumType.STRING)
     private WorkOrderState state = WorkOrderState.OPEN;

@@ -14,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.cws.domain.types.Money;
 import uo.ri.cws.domain.types.Percentage;
@@ -21,6 +22,7 @@ import uo.ri.util.assertion.ArgumentChecks;
 import uo.ri.util.assertion.StateChecks;
 
 @Entity
+@Table(name = "TINVOICES")
 public class Invoice extends BaseEntity {
     private static final LocalDate JULY_1_2012 = LocalDate.of(2012, 7, 1);
 
@@ -45,6 +47,7 @@ public class Invoice extends BaseEntity {
     /*
      * VAT rate applied to the invoice, expressed as a percentage. Example: 21% VAT.
      */
+    @AttributeOverride(name = "value", column = @Column(name = "vatRate", precision = 5, scale = 2))
     private Percentage vatRate = Percentage.ofPercent(21); // default to 21%
 
     /*

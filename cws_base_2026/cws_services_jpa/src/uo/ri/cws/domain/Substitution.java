@@ -18,7 +18,8 @@ import uo.ri.util.assertion.ArgumentChecks;
  * Substitutions (through WorkOrder).
  */
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "intervention_id", "sparepart_id" }))
+@Table(name = "TSUBSTITUTIONS", uniqueConstraints = @UniqueConstraint(columnNames = { "intervention_id",
+    "sparepart_id" }))
 public class Substitution extends BaseEntity {
     // Natural attributes
     @AttributeOverride(name = "amount", column = @Column(name = "price", precision = 19, scale = 2))
